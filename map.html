@@ -88,46 +88,46 @@
     function render_map ()
     {
       t_mapwidth = 920;
-			t_mapheight = 920;
-			t_mapabswidth = Math.abs(mapxmin) + Math.abs(mapxmax);
-			t_mapabsheight = Math.abs(mapymin) + Math.abs(mapymax);
-			t_mapbiggest = Math.max(t_mapabsheight, t_mapabswidth);
-			window.size = 920 / (t_mapbiggest + 1);
-			//following if then statement is for centering the map on smallest axis
-			if (t_mapabsheight > t_mapabswidth) {
-				o_x = Math.abs((mapxmin * size) - ((920 - (t_mapabswidth * size)) / 2)) - (size / 2);
-				o_y = Math.abs(mapymin * size);
-			} else {
-				o_x = Math.abs(mapxmin * size);
-				o_y = Math.abs((mapymin * size) - ((920 - (t_mapabsheight * size)) / 2)) - (size / 2);
-			}
-			c = document.getElementById('map');
-			ctx = c.getContext('2d');
-			ctx.clearRect(0, 0, c.width, c.height);
-			for (z = 0; z <= window.maptiles; z++) {
-				ctx.beginPath();
-				ctx.lineWidth = '1';
-				x = (map[z].x * size) + o_x;
-				y = (map[z].y * size) + o_y;
-				ctx.fillRect(x, y, size, size);
-				ctx.stroke();
-			}
+      t_mapheight = 920;
+      t_mapabswidth = Math.abs(mapxmin) + Math.abs(mapxmax);
+      t_mapabsheight = Math.abs(mapymin) + Math.abs(mapymax);
+      t_mapbiggest = Math.max(t_mapabsheight, t_mapabswidth);
+      window.size = 920 / (t_mapbiggest + 1);
+      //following if then statement is for centering the map on smallest axis
+      if (t_mapabsheight > t_mapabswidth) {
+        o_x = Math.abs((mapxmin * size) - ((920 - (t_mapabswidth * size)) / 2)) - (size / 2);
+        o_y = Math.abs(mapymin * size);
+      } else {
+        o_x = Math.abs(mapxmin * size);
+        o_y = Math.abs((mapymin * size) - ((920 - (t_mapabsheight * size)) / 2)) - (size / 2);
+      }
+      c = document.getElementById('map');
+      ctx = c.getContext('2d');
+      ctx.clearRect(0, 0, c.width, c.height);
+      for (z = 0; z <= window.maptiles; z++) {
+        ctx.beginPath();
+        ctx.lineWidth = '1';
+        x = (map[z].x * size) + o_x;
+        y = (map[z].y * size) + o_y;
+        ctx.fillRect(x, y, size, size);
+        ctx.stroke();
+      }
       //console.log(JSON.stringify(map).length);
     }
-		function rand(min, max)
+    function rand(min, max)
     {
-			return Math.floor(Math.random() * (max - min + 1) + min);
-		}
-		function checkmaptile(t_input)
+      return Math.floor(Math.random() * (max - min + 1) + min);
+    }
+    function checkmaptile(t_input)
     {
-			for (c = 0; c < window.map.length; c++)
+      for (c = 0; c < window.map.length; c++)
       {
-				if (map[c]['x'] == t_input['x'] && map[c]['y'] == t_input['y'])
-					return false;
-			}
-			return true;
-		}
-		</script>
+        if (map[c]['x'] == t_input['x'] && map[c]['y'] == t_input['y'])
+          return false;
+      }
+      return true;
+    }
+    </script>
     <style>
       html{
         font-family: 'Open Sans', sans-serif;
@@ -229,13 +229,13 @@
         margin:20px;
       }
     </style>
-	</head>
-	<body>
-		<div id="banner">
-			<div id="bannerinr">
+  </head>
+  <body>
+    <div id="banner">
+      <div id="bannerinr">
         <div id="bannertext">Javascript Map Generation Demo</div>
-			</div>
-		</div>
+      </div>
+    </div>
     <div id="module">
       <div id="moduleinr">
         <div class="moduleheader">Settings</div>
@@ -275,5 +275,5 @@
         </div>
       </div>
     </div>
-	</body>
+  </body>
 </html>
