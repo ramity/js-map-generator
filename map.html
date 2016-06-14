@@ -1,10 +1,12 @@
 <!DOCTYPE html>
 <html>
   <head>
-    <link href="https://fonts.googleapis.com/css?family=Open+Sans" rel="stylesheet" type="text/css">
-		<script>
-    window.onload = function () {
-      document.getElementById('modulebutton').onclick=function () {
+    <link href="https://fonts.googleapis.com/css?family=Open+Sans" rel="stylesheet" type="text/css"/>
+    <script>
+    window.onload = function ()
+    {
+      document.getElementById('modulebutton').onclick=function ()
+      {
         window.map = null;
 
         t_a_start = new Date().getTime();
@@ -20,7 +22,8 @@
         document.getElementById('output_c').value = window.size;
       }
     }
-    function create_map () {
+    function create_map ()
+    {
       window.maptiles=parseInt(document.getElementById('input_a').value);
       window.mapxmax = 0;
       window.mapymax = 0;
@@ -81,7 +84,9 @@
         }
       }
     }
-    function render_map () {
+
+    function render_map ()
+    {
       t_mapwidth = 920;
 			t_mapheight = 920;
 			t_mapabswidth = Math.abs(mapxmin) + Math.abs(mapxmax);
@@ -109,11 +114,14 @@
 			}
       //console.log(JSON.stringify(map).length);
     }
-		function rand(min, max) {
+		function rand(min, max)
+    {
 			return Math.floor(Math.random() * (max - min + 1) + min);
 		}
-		function checkmaptile(t_input) {
-			for (c = 0; c < window.map.length; c++) {
+		function checkmaptile(t_input)
+    {
+			for (c = 0; c < window.map.length; c++)
+      {
 				if (map[c]['x'] == t_input['x'] && map[c]['y'] == t_input['y'])
 					return false;
 			}
