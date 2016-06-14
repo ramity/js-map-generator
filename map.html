@@ -1,0 +1,271 @@
+<!DOCTYPE html>
+<html>
+	<head>
+    <link href="https://fonts.googleapis.com/css?family=Open+Sans" rel="stylesheet" type="text/css">
+		<script>
+    window.onload = function () {
+      document.getElementById('modulebutton').onclick=function () {
+        window.map = null;
+        
+        t_a_start = new Date().getTime();
+        create_map();
+        t_a_end = new Date().getTime();
+
+        t_b_start = new Date().getTime();
+        render_map();
+        t_b_end = new Date().getTime();
+
+        document.getElementById('output_a').value = t_a_end - t_a_start + " ms";
+        document.getElementById('output_b').value = t_b_end - t_b_start + " ms";
+        document.getElementById('output_c').value = window.size;
+      }
+    }
+    function create_map () {
+      window.maptiles=parseInt(document.getElementById('input_a').value);
+      window.mapxmax = 0;
+      window.mapymax = 0;
+      window.mapxmin = 0;
+      window.mapymin = 0;
+      window.map = [];
+      window.map[0] = {
+      'title': 'spawn'
+      , 'x': 0
+      , 'y': 0
+      };
+      cur_x = 0;
+      cur_y = 0;
+      for (c = 1; c < maptiles + 1; c++) {
+        t_tile = {};
+        t_cur_x = cur_x;
+        t_cur_y = cur_y;
+        //declaring +1 or -1 delta in direction
+        if (rand(0, 1) == 0) {
+          r_delta = 1;
+        } else {
+          r_delta = -1;
+        }
+        //declaring if change is in the x or y planes
+        if (rand(0, 1) == 0) {
+          t_cur_x += r_delta;
+        } else {
+          t_cur_y += r_delta;
+        }
+        //declare temp tile
+        t_tile = {
+          'x': t_cur_x
+          , 'y': t_cur_y
+        };
+        //search array to check if map tile coords already exist
+        if (checkmaptile(t_tile)) {
+          //create map tiled
+          window.maperror = 0;
+          t_tile.id = c;
+          window.map[c] = t_tile;
+          cur_x = t_cur_x;
+          cur_y = t_cur_y;
+          if (cur_x > mapxmax)
+            mapxmax = cur_x;
+          if (cur_y > mapymax)
+            mapymax = cur_y;
+          if (cur_x < mapxmin)
+            mapxmin = cur_x;
+          if (cur_y < mapymin)
+            mapymin = cur_y;
+        } else {
+          window.maperror++;
+          if (window.maperror >= 200) {
+            window.maperror = 0;
+            cur_x = window.map[c - 1].x;
+            cur_y = window.map[c - 1].y;
+          }
+        }
+      }
+    }
+    function render_map () {
+      t_mapwidth = 920;
+			t_mapheight = 920;
+			t_mapabswidth = Math.abs(mapxmin) + Math.abs(mapxmax);
+			t_mapabsheight = Math.abs(mapymin) + Math.abs(mapymax);
+			t_mapbiggest = Math.max(t_mapabsheight, t_mapabswidth);
+			window.size = 920 / (t_mapbiggest + 1);
+			//following if then statement is for centering the map on smallest axis
+			if (t_mapabsheight > t_mapabswidth) {
+				o_x = Math.abs((mapxmin * size) - ((920 - (t_mapabswidth * size)) / 2)) - (size / 2);
+				o_y = Math.abs(mapymin * size);
+			} else {
+				o_x = Math.abs(mapxmin * size);
+				o_y = Math.abs((mapymin * size) - ((920 - (t_mapabsheight * size)) / 2)) - (size / 2);
+			}
+			c = document.getElementById('map');
+			ctx = c.getContext('2d');
+			ctx.clearRect(0, 0, c.width, c.height);
+			for (z = 0; z <= window.maptiles; z++) {
+				ctx.beginPath();
+				ctx.lineWidth = '1';
+				x = (map[z].x * size) + o_x;
+				y = (map[z].y * size) + o_y;
+				ctx.fillRect(x, y, size, size);
+				ctx.stroke();
+			}
+      //console.log(JSON.stringify(map).length);
+    }
+		function rand(min, max) {
+			return Math.floor(Math.random() * (max - min + 1) + min);
+		}
+		function checkmaptile(t_input) {
+			for (c = 0; c < window.map.length; c++) {
+				if (map[c]['x'] == t_input['x'] && map[c]['y'] == t_input['y'])
+					return false;
+			}
+			return true;
+		}
+		</script>
+    <style>
+      html{
+        font-family: 'Open Sans', sans-serif;
+      }
+      body{
+        margin:0px;
+      }
+      div{
+        float:left;
+      }
+      div#banner{
+        width:100%;
+        height:200px;
+        background-color:#01DEAF;
+        color:#fff;
+        font-size:36px;
+        line-height:200px;
+        margin-bottom:20px;
+      }
+      div#bannerinr{
+        width:960px;
+        height:200px;
+        float:none;
+        margin:0px auto;
+      }
+      div#bannertext{
+        width:940px;
+        height:400px;
+        padding:0px 10px;
+      }
+      div#module
+      {
+        width:100%;
+        height:750px;
+      }
+      div#moduleinr
+      {
+        width:960px;
+        height:750px;
+        float:none;
+        margin:0px auto;
+      }
+      div.moduleheader{
+        width:940px;
+        height:50px;
+        padding:0px 10px;
+        line-height:50px;
+        border-bottom:1px solid #eee;
+        margin-bottom:20px;
+      }
+      div.moduletable{
+        width:960px;
+        line-height:30px;
+        margin-bottom:20px;
+        background-color:#fafafa;
+      }
+      div.moduletableitem{
+        width:960px;
+        height:60px;
+        border-bottom:1px solid #eee;
+      }
+      div.moduletableitemname{
+        width:700px;
+        height:40px;
+        line-height:40px;
+        margin:10px;
+      }
+      div.moduletableitemvalue{
+        width:240px;
+        height:40px;
+        line-height:40px;
+        margin:10px 0px;
+      }
+      input.moduletable{
+        width:240px;
+        height:40px;
+        border:none;
+        outline:none;
+        padding:0px;
+        margin:0px;
+        text-indent:10px;
+        background-color:#eee;
+      }
+      div#modulebutton
+      {
+        width:940px;
+        height:50px;
+        padding:0px 10px;
+        line-height:50px;
+        color:#fff;
+        cursor:pointer;
+        text-align:center;
+        background-color:#01DEAF;
+        margin-bottom:20px;
+      }
+      canvas#map{
+        width:920px;
+        height:920px;
+        margin:20px;
+      }
+    </style>
+	</head>
+	<body>
+		<div id="banner">
+			<div id="bannerinr">
+        <div id="bannertext">Javascript Map Generation Demo</div>
+			</div>
+		</div>
+    <div id="module">
+      <div id="moduleinr">
+        <div class="moduleheader">Settings</div>
+        <div class="moduletable">
+          <div class="moduletableitem">
+            <div class="moduletableitemname">window.maptiles</div>
+            <div class="moduletableitemvalue">
+              <input class="moduletable" id="input_a" placeholder="# of tiles generated" type="number">
+            </div>
+          </div>
+        </div>
+        <div class="moduleheader">Output</div>
+        <div class="moduletable">
+          <div class="moduletableitem">
+            <div class="moduletableitemname">window.generation_time</div>
+            <div class="moduletableitemvalue">
+              <input class="moduletable" id="output_a" placeholder="Generation time in ms" type="text" disabled>
+            </div>
+          </div>
+          <div class="moduletableitem">
+            <div class="moduletableitemname">window.render_time</div>
+            <div class="moduletableitemvalue">
+              <input class="moduletable" id="output_b" placeholder="Render time in ms" type="text" disabled>
+            </div>
+          </div>
+          <div class="moduletableitem">
+            <div class="moduletableitemname">window.size</div>
+            <div class="moduletableitemvalue">
+              <input class="moduletable" id="output_c" placeholder="Tile size in pixels" type="text" disabled>
+            </div>
+          </div>
+        </div>
+        <div id="modulebutton">Process</div>
+        <div class="moduleheader">Display</div>
+        <div class="moduletable">
+          <canvas id="map" width="920" height="920"></canvas>
+        </div>
+      </div>
+    </div>
+	</body>
+</html>
